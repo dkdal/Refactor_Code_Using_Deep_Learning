@@ -30,7 +30,6 @@ def find_method(java_code, line_number):
                             method_content = extract_method_content(java_code, start_line, end_line)
                             return method_content
     except Exception as e:
-        print("error: ", e)
         return None
     # If no method containing the line number is found
     return None
@@ -102,7 +101,7 @@ if __name__=="__main__":
                     # get the java code from the json data
                     java_code = data['Smelly Sample']
                     # get the line number from the json data
-                    java_refactored = data['Method after Refactoring']
+                    java_refactored = data['Refactored Sample']
                     line_number = data['lineNo']
                     # print("java code: ", java_code)
                     # print("java refactored: ", java_refactored)
@@ -114,7 +113,7 @@ if __name__=="__main__":
                             'smelly_method': smelly_method_content,
                             'refactored_method': refactored_method_content
                         })
-            with open(os.path.join("data", "output", "results.jsonl"), 'a') as f:
+            with open(os.path.join("data", "output", "analyzed_dataset.jsonl"), 'a') as f:
                 for result in file_results:
                     f.write(json.dumps(result) + '\n')
 

@@ -1,0 +1,3 @@
+DesigniteJava Enterprise. Version 2.3.0
+Copyright (C) 2022 Designite. All rights reserved.
+License registered successfully.

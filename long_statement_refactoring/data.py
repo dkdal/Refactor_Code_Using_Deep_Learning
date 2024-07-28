@@ -1,3 +1,6 @@
+# data processsing similarly implemented from the refactoring candidate identification from lab 6 
+#(https://git.cs.dal.ca/courses/2024-winter/csci4130-6314/tutorials/lab-6-refactoring-candidate-identification/-/blob/main/src/dataprocessing/data.py?ref_type=heads)
+
 import subprocess
 import os
 import threading
@@ -30,7 +33,7 @@ def process_repositories(item):
     default_branch = item.get('defaultBranch')
 
     jar_path = os.path.join(os.getcwd(),"resources","extract-variable-extractor-1.0-jar-with-dependencies.jar")
-    output_path = os.path.join(os.getcwd(),"data","output", "dataset", repository_name+".jsonl")
+    output_path = os.path.join(os.getcwd(),"data","output", "backup", repository_name+".jsonl")
     repo_url = f"{GITHUB_BASE_URL}{name}.git"
 
     os.makedirs(os.path.join(os.getcwd(),"data","output","logs"),exist_ok=True)
@@ -62,7 +65,7 @@ if __name__=="__main__":
     json_file_path = os.path.join(os.getcwd(), input_file_path)
 
     with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
-        repository_generator = generate_repository_details(json_file_path, 45, 50)
+        repository_generator = generate_repository_details(json_file_path, 86, 116)
         output = executor.map(process_repositories, repository_generator)
 
     output_file_path = os.path.join(os.getcwd(), "data", "output", "output.json")

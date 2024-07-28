@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Code Refactoring</title>
+    <style>
+        body {
+            background-color: #f0f5f9; /* Light blue background */
+            font-family: Arial, sans-serif; /* Use Arial font */
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 50px;
+            position: relative; /* Ensure the spinner is positioned relative to the container */
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50; /* Dark blue text color */
+            margin-bottom: 20px;
+        }
+
+        .input-container {
+            display: flex;
+            justify-content: space-between;
+            width: 80%;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 45%;
+            height: 350px;
+            border: 2px solid #3498db; /* Blue border */
+            border-radius: 5px; /* Rounded corners */
+            padding: 10px; /* Add padding */
+            box-sizing: border-box; /* Include border and padding in width */
+        }
+
+        button {
+            width: 10%;
+            height: 40px;
+            background-color: #3498db; /* Blue button */
+            color: white; /* White text */
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s; /* Smooth color transition */
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* Add shadow */
+        }
+
+        button:hover {
+            background-color: #2980b9; /* Darker blue on hover */
+        }
+
+        .spinner-overlay {
+            position: fixed; /* Fixed position to cover the entire viewport */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 999; /* Ensure the spinner is on top of other content */
+        }
+
+        .spinner {
+            width: 56px;
+            height: 56px;
+            display: grid;
+            border: 4.5px solid #fff; /* White border */
+            border-radius: 50%;
+            border-color: #dbdcef #fff; /* White border */
+            animation: spinner-e04l1k 1s infinite linear;
+        }
+
+        .spinner::before,
+        .spinner::after {
+            content: "";
+            grid-area: 1/1;
+            margin: 2.2px;
+            border: inherit;
+            border-radius: 50%;
+        }
+
+        .spinner::before {
+            border-color: #474bff #fff; /* White border */
+            animation: inherit;
+            animation-duration: 0.5s;
+            animation-direction: reverse;
+        }
+
+        .spinner::after {
+            margin: 8.9px;
+        }
+
+        @keyframes spinner-e04l1k {
+            100% {
+                transform: rotate(1turn);
+            }
+        }
+
+        .hide-spinner {
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="title" style="color: #3498db;">Code Refactoring</div> <!-- Blue title -->
+        <div class="input-container">
+            <textarea id="input-code" placeholder="Enter code here"></textarea>
+            <textarea id="processed-code" placeholder="Refactored code will appear here" readonly></textarea>
+        </div>
+        <button onclick="processCode()">Refactor</button>
+        <div class="spinner-overlay hide-spinner" id="spinner-overlay">
+            <div class="spinner"></div>
+        </div>
+    </div>
+    <div id="variable_declaration"></div>
+    <div id="result"></div>
+
+    <script>
+        function processCode() {
+            var code = document.getElementById("input-code").value;
+            // Show loader
+            document.getElementById("spinner-overlay").classList.remove("hide-spinner");
+            fetch('/process_code', {
+                method: 'POST',
+                body: new URLSearchParams({ code: code }),
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById("processed-code").value = data.processed_code;
+                    if(data.declaration_variable != null)
+                        document.getElementById("variable_declaration").innerText = "declare variable at appropriate place: " + data.declaration_variable;
+                    else
+                        document.getElementById("variable_declaration").innerText = "";
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                })
+                .finally(() => {
+                    // Hide loader
+                    document.getElementById("spinner-overlay").classList.add("hide-spinner");
+                });
+        }
+    </script>
+</body>
+
+</html>
