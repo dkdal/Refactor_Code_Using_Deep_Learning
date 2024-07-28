@@ -534,6 +534,5 @@ The above code is for Python language, and similar way, you can utilize this API
 
 ## Authors
 
-- [Harsh Mehta](https://www.linkedin.com/in/harshmehta19/)
 - [Dhruv Kapoor](https://www.linkedin.com/in/kapoor-dhruv/)
 
